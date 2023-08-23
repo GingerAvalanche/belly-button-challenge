@@ -1,4 +1,5 @@
 let samples;
+let colorScales = ['YlOrRd', 'YlGnBu', 'RdBu', 'Portland', 'Picnic', 'Jet', 'Hot', 'Greys', 'Greens', 'Electric', 'Earth', 'Bluered', 'Blackbody'];
 
 function restyleBarChart(sample) {
     let top_ten_otus = getSampleObjectArray(sample)
@@ -13,9 +14,25 @@ function restyleBarChart(sample) {
     Plotly.restyle("bar", trace);
 }
 
+function restyleBubbleChart(sample) {
+    trace = {
+        x: [sample.otu_ids],
+        y: [sample.sample_values],
+        text: [sample.otu_labels],
+        marker: {
+            color: sample.otu_ids,
+            colorscale: colorScales[Math.floor(Math.random() * colorScales.length)],
+            size: sample.sample_values
+        }
+    };
+
+    Plotly.restyle("bubble", trace);
+}
+
 function optionChanged(newOption) {
     let newSample = samples.samples.find(s => s.id == newOption);
     restyleBarChart(newSample);
+    restyleBubbleChart(newSample);
 }
 
 function getSampleObjectArray(sample) {
@@ -32,4 +49,7 @@ d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1
 
     Plotly.newPlot("bar", [{ type: 'bar', orientation: 'h' }]);
     restyleBarChart(firstSample);
+
+    Plotly.newPlot("bubble", [{ mode: 'markers' }]);
+    restyleBubbleChart(firstSample);
 });
