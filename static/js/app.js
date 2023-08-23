@@ -29,10 +29,20 @@ function restyleBubbleChart(sample) {
     Plotly.restyle("bubble", trace);
 }
 
+function updateDemographicInfo(metadata) {
+    let p = "<p>";
+    for (let key in metadata) {
+        p += `${key}: ${metadata[key]}<br>`;
+    }
+    p += "</p>";
+    d3.select("#sample-metadata").html(p);
+}
+
 function optionChanged(newOption) {
     let newSample = samples.samples.find(s => s.id == newOption);
     restyleBarChart(newSample);
     restyleBubbleChart(newSample);
+    updateDemographicInfo(samples.metadata.find(m => m.id == newOption));
 }
 
 function getSampleObjectArray(sample) {
@@ -52,4 +62,6 @@ d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1
 
     Plotly.newPlot("bubble", [{ mode: 'markers' }]);
     restyleBubbleChart(firstSample);
+
+    updateDemographicInfo(j.metadata[0]);
 });
