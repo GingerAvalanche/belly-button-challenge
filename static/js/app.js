@@ -22,7 +22,8 @@ function restyleBarChart(sample) {
 
     trace = {
         x: [top_ten_otus.map(o => o.sample_value).reverse()],
-        y: [top_ten_otus.map(o => `OTU ${o.otu_id}`).reverse()]
+        y: [top_ten_otus.map(o => `OTU ${o.otu_id}`).reverse()],
+        text: [top_ten_otus.map(o => o.otu_label)]
     };
 
     Plotly.restyle("bar", trace);
@@ -67,7 +68,11 @@ function optionChanged(newOption) {
 
 function getSampleObjectArray(sample) {
     return sample["otu_ids"].map((el, idx) => {
-        return { otu_id: el, sample_value: sample["sample_values"][idx] }
+        return {
+            otu_id: el,
+            sample_value: sample["sample_values"][idx],
+            otu_label: sample["otu_labels"][idx]
+        }
     });
 }
 
